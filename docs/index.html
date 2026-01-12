@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人主页</title>
+    <style>
+        :root {
+            --primary-color: #24292e;
+            --accent-color: #0366d6;
+            --bg-color: #f6f8fa;
+            --text-color: #24292e;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            background-color: #ddd; /* Placeholder color */
+        }
+
+        h1 {
+            margin: 0.5rem 0;
+            font-size: 2.5rem;
+        }
+
+        .bio {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 1rem;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        .card h3 a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #586069;
+            margin-bottom: 0;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #f1f8ff;
+            color: var(--accent-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        ul.blog-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.blog-list li {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        ul.blog-list li:last-child {
+            border-bottom: none;
+        }
+
+        .blog-date {
+            font-size: 0.85rem;
+            color: #6a737d;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #586069;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 2rem 1rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Replace src with your actual avatar URL -->
+        <img src="./pic/117195686.jfif" alt="Avatar" class="avatar">
+        <h1>个人主页开发中，效果仅供参考</h1>
+        <h1>ioeshx</h1>
+        <p class="bio">游戏玩家</p>
+    </header>
+
+    <div class="container">
+        
+        <section id="about">
+            <h2>关于我</h2>
+            <p>爱打游戏的程序员</p>
+            <p>技术栈：Python, C/C++, Java</p>
+        </section>
+
+        <section id="blogs">
+            <h2>最新博客</h2>
+            <ul class="blog-list">
+                <li>
+                    <span class="blog-date">2023-10-01</span>
+                    <h3><a href="#">如何使用 GitHub Pages 搭建个人博客</a></h3>
+                    <p>这是一篇关于静态网站托管的入门教程...</p>
+                </li>
+                <li>
+                    <span class="blog-date">2023-09-15</span>
+                    <h3><a href="#">深入理解 CSS Grid 布局</a></h3>
+                    <p>详细讲解 Grid 布局在响应式设计中的应用...</p>
+                </li>
+                <li>
+                    <span class="blog-date">2023-08-20</span>
+                    <h3><a href="#">我的 VS Code 插件清单</a></h3>
+                    <p>分享一些提高开发效率的必备插件...</p>
+                </li>
+            </ul>
+        </section>
+
+        <section id="repos">
+            <h2>Repositories</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3><a href="#">awesome-project-1</a></h3>
+                    <p>这是一个很棒的项目描述，简要介绍了项目的功能。</p>
+                    <span class="tag">JavaScript</span>
+                </div>
+                <div class="card">
+                    <h3><a href="#">personal-website</a></h3>
+                    <p>我的个人主页源代码，基于 HTML/CSS。</p>
+                    <span class="tag">HTML/CSS</span>
+                </div>
+                <div class="card">
+                    <h3><a href="#">cli-tool-v2</a></h3>
+                    <p>一个用于自动化任务的命令行工具。</p>
+                    <span class="tag">Python</span>
+                </div>
+                <div class="card">
+                    <h3><a href="#">learning-notes</a></h3>
+                    <p>我的编程学习笔记集合。</p>
+                    <span class="tag">Markdown</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ioeshx. All rights reserved.</p>
+        <p>
+            <a href="https://github.com/">GitHub</a> | 
+            <!-- <a href="mailto:email@example.com">Email</a> -->
+        </p>
+    </footer>
+
+</body>
+</html>
