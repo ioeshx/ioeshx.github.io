@@ -1,16 +1,45 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的个人主页</title>
     <style>
         :root {
-            --primary-color: #24292e;
-            --accent-color: #0366d6;
-            --bg-color: #f6f8fa;
-            --text-color: #24292e;
+            /* Common variables */
+            --transition-speed: 0.3s;
+        }
+
+        [data-theme="dark"] {
+            /* Default: Black/Red Theme */
+            --primary-color: #1a1a1a; /* Dark Gray for Header/Nav */
+            --primary-gradient: linear-gradient(135deg, #1a1a1a, #242424);
+            --accent-color: #dc143c; /* Red specified by user */
+            --accent-color-rgb: 220, 20, 60;
+            --bg-color: #121212; /* Black / Dark Gray */
+            --text-color: #f0f0f0;
+            --card-bg: #1e1e1e;
+            --header-text: #ffffff; /* White text on dark bg */
+            --nav-text: #dc143c; /* Red text for active states */
+            --nav-inactive-text: rgba(255, 255, 255, 0.7);
+            --nav-hover-bg: rgba(255, 255, 255, 0.15);
+            --border-color: #333333;
+        }
+
+        [data-theme="light"] {
+            /* White/Gold Theme */
+            --primary-color: #CFB53B; /* Old Gold */
+            --primary-gradient: linear-gradient(135deg, #CFB53B, #D9C668);
+            --accent-color: #A88F1F; /* Darker Old Gold for text links/hover */
+            --accent-color-rgb: 168, 143, 31;
+            --bg-color: #fdfdfd; /* Pure white or very subtle off-white */
+            --text-color: #2d2d2d;
             --card-bg: #ffffff;
+            --header-text: #241f05;   /* Dark text for header on gold bg */
+            --nav-text: #241f05;      /* Active nav text */
+            --nav-inactive-text: rgba(36, 31, 5, 0.7); /* Inactive nav text */
+            --nav-hover-bg: rgba(0, 0, 0, 0.08);
+            --border-color: #eeeeee;
         }
 
         body {
@@ -20,20 +49,139 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: var(--primary-gradient);
+            padding: 0.8rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-mid {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a.nav-link {
+            color: var(--nav-inactive-text);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        nav a.nav-link:hover, nav a.nav-link.active {
+            color: var(--nav-text);
+            background-color: var(--nav-hover-bg);
+        }
+
+        /* GitHub Icon */
+        .github-icon svg {
+            fill: var(--nav-inactive-text);
+            transition: fill 0.2s;
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+        }
+        
+        .github-icon:hover svg {
+            fill: var(--nav-text);
+        }
+
+        /* Theme Toggle Slider */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 48px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+        }
+
+        .slider:before {
+            background-color: #fff;
+            bottom: 3px;
+            content: "";
+            height: 18px;
+            left: 3px;
+            position: absolute;
+            transition: .4s;
+            width: 18px;
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        /* Checked state (Light Mode - Gold) */
+        input:checked + .slider {
+            background-color: #CFB53B; /* Gold slider for light mode */
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
         }
 
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 4rem 2rem;
+            background: var(--primary-gradient);
+            color: var(--header-text);
+            padding: 4rem 2rem 2rem 2rem;
             text-align: center;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .avatar {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            border: 4px solid white;
+            border: 4px solid var(--card-bg); /* Use card bg for border to match container usually or keep white */
             object-fit: cover;
             margin-bottom: 1rem;
             background-color: #ddd; /* Placeholder color */
@@ -42,6 +190,19 @@
         h1 {
             margin: 0.5rem 0;
             font-size: 2.5rem;
+            color: var(--header-text);
+        }
+        
+        /* Specific override for h2 in dark mode/light mode */
+        h2 {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+        
+        [data-theme="light"] h2 {
+            color: var(--primary-color);
         }
 
         .bio {
@@ -49,12 +210,14 @@
             opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
+            color: var(--header-text);
         }
 
         .container {
             max-width: 900px;
             margin: 2rem auto;
             padding: 0 1rem;
+            min-height: 60vh; /* Ensure content pushes footer down */
         }
 
         section {
@@ -63,13 +226,42 @@
             margin-bottom: 2rem;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.3s ease-in-out;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        h2 {
-            border-bottom: 2px solid var(--bg-color);
-            padding-bottom: 0.5rem;
-            margin-top: 0;
-            color: var(--primary-color);
+        [data-theme="dark"] section {
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="light"] section {
+            border: none;
+        }
+
+        section.active {
+            display: block;
+        }
+        
+        [data-theme="light"] .tag {
+             background-color: rgba(0,0,0,0.05); /* Restore light theme tag background */
+        }
+        
+        /* Default is now dark theme for tags */
+        .tag {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.1);
+            color: var(--accent-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            border: 1px solid var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .grid {
@@ -79,15 +271,17 @@
         }
 
         .card {
-            border: 1px solid #e1e4e8;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 1rem;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, background-color 0.3s;
+            background-color: var(--card-bg);
         }
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2), 0 0 8px rgba(var(--accent-color-rgb), 0.3);
+            border-color: var(--accent-color);
         }
 
         .card h3 {
@@ -102,18 +296,24 @@
 
         .card p {
             font-size: 0.9rem;
-            color: #586069;
+            color: var(--text-color);
+            opacity: 0.8;
             margin-bottom: 0;
         }
 
         .tag {
             display: inline-block;
-            background-color: #f1f8ff;
+            background-color: rgba(255,255,255,0.1);
             color: var(--accent-color);
             padding: 0.2rem 0.5rem;
             border-radius: 12px;
             font-size: 0.8rem;
             margin-top: 0.5rem;
+            border: 1px solid var(--accent-color);
+        }
+        
+        [data-theme="light"] .tag {
+             background-color: rgba(0,0,0,0.05); /* Restore light theme tag background */
         }
 
         ul.blog-list {
@@ -124,23 +324,62 @@
         ul.blog-list li {
             margin-bottom: 1rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
 
         ul.blog-list li:last-child {
             border-bottom: none;
         }
+        
+        ul.blog-list h3 a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
 
         .blog-date {
             font-size: 0.85rem;
-            color: #6a737d;
+            color: var(--text-color);
+            opacity: 0.7;
         }
 
         footer {
             text-align: center;
             padding: 2rem;
-            color: #586069;
+            color: var(--text-color);
+            opacity: 0.8;
             font-size: 0.9rem;
+        }
+        
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* Back to Top Button */
+        #back-to-top {
+            background-color: var(--accent-color);
+            /* ... rest same as before ... */
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: none;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #back-to-top:hover {
+            filter: brightness(0.8);
+            transform: translateY(-3px);
         }
 
         @media (max-width: 600px) {
@@ -150,45 +389,81 @@
             h1 {
                 font-size: 2rem;
             }
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-right {
+                margin-top: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
 
+    <nav>
+        <!-- Left spacer to center the nav-mid -->
+        <div style="flex:1;"></div>
+
+        <div class="nav-mid">
+            <ul>
+                <li><a onclick="showSection('repos')" class="nav-link">Repo</a></li>
+                <li><a onclick="showSection('blogs')" class="nav-link">Blog</a></li>
+                <li><a onclick="showSection('about')" class="nav-link active">About me</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right" style="flex:1; justify-content: flex-end;">
+            <!-- GitHub Icon -->
+            <a href="https://github.com/ioeshx" target="_blank" class="github-icon" title="GitHub">
+                <svg viewBox="0 0 16 16" version="1.1" aria-hidden="true">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+            </a>
+
+            <!-- Theme Toggle -->
+            <label class="theme-switch-wrapper" title="Switch Theme">
+                <div class="theme-switch">
+                    <input type="checkbox" id="theme-toggle" onclick="toggleTheme()">
+                    <span class="slider round"></span>
+                </div>
+            </label>
+        </div>
+    </nav>
+
     <header>
         <!-- Replace src with your actual avatar URL -->
         <img src="./pic/117195686.jfif" alt="Avatar" class="avatar">
-        <h1>个人主页开发中，效果仅供参考</h1>
         <h1>ioeshx</h1>
         <p class="bio">游戏玩家</p>
     </header>
 
     <div class="container">
         
-        <section id="about">
+        <section id="about" class="active">
             <h2>关于我</h2>
             <p>爱打游戏的程序员</p>
             <p>技术栈：Python, C/C++, Java</p>
         </section>
 
         <section id="blogs">
-            <h2>最新博客</h2>
+            <h2>Blogs</h2>
             <ul class="blog-list">
                 <li>
-                    <span class="blog-date">2023-10-01</span>
-                    <h3><a href="#">如何使用 GitHub Pages 搭建个人博客</a></h3>
-                    <p>这是一篇关于静态网站托管的入门教程...</p>
+                    <h3><a href="#">个人博客示例</a></h3>
+                    <span class="blog-date">2026-01-01</span>
+                    <p>这是一篇个人博客示例</p>
                 </li>
-                <li>
-                    <span class="blog-date">2023-09-15</span>
+                <!-- <li>
                     <h3><a href="#">深入理解 CSS Grid 布局</a></h3>
+                    <span class="blog-date">2023-09-15</span>
                     <p>详细讲解 Grid 布局在响应式设计中的应用...</p>
                 </li>
                 <li>
-                    <span class="blog-date">2023-08-20</span>
                     <h3><a href="#">我的 VS Code 插件清单</a></h3>
+                    <span class="blog-date">2023-08-20</span>
                     <p>分享一些提高开发效率的必备插件...</p>
-                </li>
+                </li> -->
             </ul>
         </section>
 
@@ -196,16 +471,16 @@
             <h2>Repositories</h2>
             <div class="grid">
                 <div class="card">
-                    <h3><a href="#">awesome-project-1</a></h3>
+                    <h3><a href="#">example-project1</a></h3>
                     <p>这是一个很棒的项目描述，简要介绍了项目的功能。</p>
-                    <span class="tag">JavaScript</span>
+                    <span class="tag">C</span>
                 </div>
                 <div class="card">
-                    <h3><a href="#">personal-website</a></h3>
+                    <h3><a href="#">example-website</a></h3>
                     <p>我的个人主页源代码，基于 HTML/CSS。</p>
                     <span class="tag">HTML/CSS</span>
                 </div>
-                <div class="card">
+                <!-- <div class="card">
                     <h3><a href="#">cli-tool-v2</a></h3>
                     <p>一个用于自动化任务的命令行工具。</p>
                     <span class="tag">Python</span>
@@ -214,19 +489,76 @@
                     <h3><a href="#">learning-notes</a></h3>
                     <p>我的编程学习笔记集合。</p>
                     <span class="tag">Markdown</span>
-                </div>
+                </div> -->
             </div>
         </section>
 
     </div>
 
     <footer>
-        <p>&copy; 2024 ioeshx. All rights reserved.</p>
-        <p>
-            <a href="https://github.com/">GitHub</a> | 
-            <!-- <a href="mailto:email@example.com">Email</a> -->
-        </p>
+        <p>&copy; 2026 ioeshx. All rights reserved.</p>
     </footer>
+
+    <button id="back-to-top" onclick="scrollToTop()" title="回到顶部">↑</button>
+
+    <script>
+        // Section Switching Logic
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update active state in nav
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('onclick').includes(sectionId)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Back to Top Button Logic
+        const backToTopButton = document.getElementById("back-to-top");
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                backToTopButton.style.display = "flex";
+                // Small delay to allow display flex to apply before opacity transition
+                setTimeout(() => backToTopButton.style.opacity = "1", 10);
+            } else {
+                backToTopButton.style.opacity = "0";
+                setTimeout(() => {
+                    if (backToTopButton.style.opacity === "0") {
+                       backToTopButton.style.display = "none"; 
+                    }
+                }, 300);
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const isChecked = document.getElementById('theme-toggle').checked;
+            if (isChecked) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        // Initialize default section (About Me)
+        showSection('about');
+    </script>
 
 </body>
 </html>
